@@ -21,20 +21,36 @@ from twitchAPI.type import AuthScope
 import asyncio
 import certifi
 from quixstreams import Application 
-
+from pprint import pformat
 os.environ["SSL_CERT_FILE"] = certifi.where()
 os.environ["SSL_CERT_DIR"] = os.path.dirname(certifi.where())
 
 load_dotenv()
 APP_ID = os.getenv('TWITCH_APP_ID')
 APP_SECRET = os.getenv('TWITCH_APP_SECRET')
-TARGET_CHANNEL = os.getenv('TARGET_CHANNEL')
+TARGET_CHANNEL = "jynxzi"
 
 # dev user auth scopes
 SCOPES = [AuthScope.USER_READ_CHAT]
 
 #kafka producer
-producer_app = Application(broker_address="localhost:9092")
+
+def handle_stats(stats):
+    s = json.loads(stats)
+    print(pformat(s))
+
+producer_app = Application(
+    broker_address="localhost:9092", 
+    loglevel="DEBUG",
+    producer_extra_config={
+        "statistics.interval.ms": 3*1000,
+        "stats_cb": handle_stats,
+        "debug": "msg",
+        "linger.ms": 2000,
+        "batch.size":  1024 * 10, #10kb per batch
+        "compression.type": "gzip", #tradeoff cpu time for disk usage and network usage
+        },
+)
 
 """
 Error handling: all API keys

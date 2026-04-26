@@ -9,6 +9,8 @@ Date: 2026-04-25
 Version: 1.0.0
 Description: This module is used to consume the raw chat messages from the kafka topic
 and produce the sentiment analysis to a kafka topic.
+
+model: https://huggingface.co/veb/twitch-roberta-base-sentiment-latest
 """
 #kafka consumer application
 app = Application(
