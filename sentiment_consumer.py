@@ -26,6 +26,7 @@ tokenizer = AutoTokenizer.from_pretrained(model_path)
 sentiment_task = pipeline("sentiment-analysis", model=model_path, tokenizer=model_path)
 
 #kafka consumer with sentiment analysis
+
 with app.get_consumer() as consumer:
     consumer.subscribe(["twitch_chat"])
     while True:
@@ -36,7 +37,8 @@ with app.get_consumer() as consumer:
             print(f"Error: {msg.error()}")
             continue
         payload = json.loads(msg.value().decode("utf-8"))
-        print(payload["message"] + " - " + str(sentiment_task(payload["message"])[0]["score"]))
-
+        print(payload)
+        print( payload["message"] + " - " + str(sentiment_task(payload["message"])[0]["score"]))
+        
         #sets the offset to the last message (we've read this message)
         consumer.store_offsets(msg)

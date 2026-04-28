@@ -28,7 +28,7 @@ os.environ["SSL_CERT_DIR"] = os.path.dirname(certifi.where())
 load_dotenv()
 APP_ID = os.getenv('TWITCH_APP_ID')
 APP_SECRET = os.getenv('TWITCH_APP_SECRET')
-TARGET_CHANNEL = "jynxzi"
+TARGET_CHANNELS = os.getenv('TARGET_CHANNEL').split(',')
 
 # dev user auth scopes
 SCOPES = [AuthScope.USER_READ_CHAT]
@@ -47,7 +47,7 @@ producer_app = Application(
         "stats_cb": handle_stats,
         "debug": "msg",
         "linger.ms": 2000,
-        "batch.size":  1024 * 10, #10kb per batch
+        "batch.size": 1024*16, #1kb per batch
         "compression.type": "gzip", #tradeoff cpu time for disk usage and network usage
         },
 )
@@ -68,13 +68,14 @@ async def run():
     #dev user login
     me = await first(twitch.get_users())
 
-    #target channel
-    target = await first(twitch.get_users(logins=[TARGET_CHANNEL]))
-    if target is None:
-        raise SystemExit(f"channel not found: {TARGET_CHANNEL}")
+    #target channels (async generator)
+    targets = [user async for user in  twitch.get_users(logins=TARGET_CHANNELS)]
+    found = {u.login.lower() for u in targets}
+    missing = [c for c in TARGET_CHANNELS if c.lower() not in found]
+    if missing:
+        raise SystemExit(f"channels not found: {missing}")
 
     print(f"authed as: {me.login}")
-    print(f"monitoring: {target.login} (id={target.id})")
 
     #defining the producers lifecycle; when the block is exited (user ctrl+c or 3600 seconds)
     with producer_app.get_producer() as producer:
@@ -86,13 +87,15 @@ async def run():
                 "sending_user": e.chatter_user_login,
                 "message": e.message.text,
             }
+            
             produce_to_kafka(producer_payload)
 
         #produce to kafka raw topic
         def produce_to_kafka(producer_payload):
+            #print(producer_payload["broadcaster_channel"])
             producer.produce(
                 topic = "twitch_chat",
-                key = TARGET_CHANNEL.encode("utf-8"),
+                key = json.dumps(producer_payload)[0].encode("utf-8"),
                 value = json.dumps(producer_payload).encode("utf-8")
             )
 
@@ -101,11 +104,13 @@ async def run():
         eventsub.start()
 
         # listen for chat messages
-        await eventsub.listen_channel_chat_message(
-            broadcaster_user_id=target.id,
-            user_id=me.id,
-            callback=on_chat,
-        )
+        for target in targets:
+            print(f"monitoring: {target.login} (id={target.id})")
+            await eventsub.listen_channel_chat_message(
+                broadcaster_user_id=target.id,
+                user_id=me.id,
+                callback=on_chat,
+            )
 
         # eventsub will run in its own process
         # so lets just wait for user input before shutting it all down again
