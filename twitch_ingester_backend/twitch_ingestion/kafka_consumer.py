@@ -30,8 +30,12 @@ class KafkaConsumer:
         return self._consumer.__exit__(*a)
 
     def consume(self):
-        """Poll once and return the decoded payload, or None if no message is ready."""
-        msg = self._consumer.poll(1)
+        """Poll once and return the decoded payload, or None if no message is ready.
+
+        100ms timeout keeps the caller's loop responsive so batched downstream
+        work (e.g. ML inference) can flush partial batches when chat is quiet.
+        """
+        msg = self._consumer.poll(0.1)
         if msg is None:
             return None
         if msg.error() is not None:

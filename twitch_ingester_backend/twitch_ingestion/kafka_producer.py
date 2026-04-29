@@ -18,7 +18,7 @@ class KafkaProducer:
             broker_address=broker,
             producer_extra_config={
                 # Wait up to 2s to fill a batch; trades latency for throughput.
-                "linger.ms": 2000,
+                "linger.ms": 1000,
                 "batch.size": 1024 * 16,
                 # gzip trades CPU for network/disk savings on chat traffic.
                 "compression.type": "gzip",

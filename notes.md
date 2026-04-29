@@ -47,3 +47,7 @@ TODO: implement the final backend which writes to PosgreSQL DB and frontend
 Trying to make code more modular
     thinking about splitting into 2 folders
         consumer, injestion + producer, and main on the outside
+Added 8 partionions to docker-compose to increase throughput
+Tested using Docker Lag the lag in increasing over 10 seconds (6954 --> 7151) so the ML model is slowing us down
+    Changed to use Apple GPU via pytorch mps, now there is no lag (Optimized hardware)
+    Sentiment is calculated on a buffer calssifying them in one forward pass. Bounded by draining 32 messages at a time from Kafka or a 500ms flush so the latency stays real time.
