@@ -19,7 +19,7 @@ An application that helps Twitch streamers and viewers analyze live stream chat 
 
 - Real-time chat ingestion and sentiment for each chat message 
 - Analysis of up to 16 concurrent channels
-- Anylysis of trends in sessions (Coming soon)
+- Analysis of trends in sessions (Coming soon)
 
 ## 📍 The Process
 - coming soon -
