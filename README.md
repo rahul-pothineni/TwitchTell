@@ -13,7 +13,7 @@ An application that helps Twitch streamers and viewers analyze live stream chat 
 
 ## Design
 
-<img width="516" height="564" alt="Screenshot 2026-05-02 at 5 07 04 PM" src="https://github.com/user-attachments/assets/9dd3957c-cc51-4d5e-b3af-41854d7d1be6" />
+<img width="492" height="565" alt="Screenshot 2026-05-02 at 5 08 59 PM" src="https://github.com/user-attachments/assets/6ed8e8a8-a0fd-46ea-8860-7990d1fdbad8" />
 
 ## 🚀 Features
 
