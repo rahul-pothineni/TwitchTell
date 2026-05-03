@@ -1,5 +1,6 @@
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
+from . import views
 
 # from api.views.chat import ChatMessageViewSet  # add as you build them
 
@@ -8,4 +9,5 @@ router = DefaultRouter()
 
 urlpatterns = [
     path("", include(router.urls)),
+    path("test/", views.dropdownMenuData),
 ]

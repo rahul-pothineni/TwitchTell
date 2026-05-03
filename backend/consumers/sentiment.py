@@ -21,8 +21,8 @@ import time
 import torch
 from transformers import pipeline
 
-from twitch_ingester_backend.twitch_ingestion import config
-from twitch_ingester_backend.twitch_ingestion.kafka_consumer import KafkaConsumer
+from backend.twitch_ingestion import config
+from backend.twitch_ingestion.kafka_consumer import KafkaConsumer
 
 from db.models import Streamer, Message
 from django.core.exceptions import ObjectDoesNotExist

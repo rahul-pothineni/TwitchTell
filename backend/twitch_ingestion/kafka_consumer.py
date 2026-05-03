@@ -9,7 +9,7 @@ returns the next decoded payload (or None on timeout/error).
 
 import json
 from quixstreams import Application
-from twitch_ingester_backend.twitch_ingestion import config
+from backend.twitch_ingestion import config
 
 class KafkaConsumer:
     def __init__(self, settings: config.Settings):

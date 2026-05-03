@@ -14,7 +14,7 @@ from twitchAPI.object.eventsub import ChannelChatMessageEvent
 from twitchAPI.twitch import Twitch
 from twitchAPI.object.api import TwitchUser
 
-from twitch_ingester_backend.twitch_ingestion.schemas.ChatMessage import ChatMessage
+from backend.twitch_ingestion.schemas.ChatMessage import ChatMessage
 from db.models import Session
 
 class ChatListener:

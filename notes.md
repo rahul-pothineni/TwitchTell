@@ -59,8 +59,39 @@ Initilized Django API and DB
 Created DB Models
     Need to work more on making the DB models more relational and easier to work together
 
-05/02/26 3:15 PM - 
+05/02/26 3:15 PM - 4:48
 
 Made session as a gloabal acess varaible in main
     accesed the session in sentiment.py to find the twitch streamer, and write the message to the DB. 
+Finished full DB routing and settings. 
+TODO: 
+    1. Complete Backend API's
+        1. Post Session Dropdown Menu
+            1. From db: Streamers + All messages from that streamers chat during the session, total messages, average sentiment
+            /session uuid/streamer username/
+        2. Live view
+            1. when user enters a streamers name we need to add a streamer chat to query
+                1. Send over message_content, message_sentiment_score, streamer_id, message_sent_at
+    2. Create React frontend
+        1. Have a plus button to add a streamer to live view
+            1. Be able to type in a streamers name
+            2. Immedietly starts streaming their chat messages in a box as - SendingUser: Message - SentimentScore
+            3. Have a graph of the sentiment over 10 Second intervals for that streamers chat.
+        2. Session Dropdown
+            1. Pick the streamer that was analyized during a previous session 
+                1. recive a graph of the sentiment over 1 minute intervals. 
+                2. Have total messages from that streamers session
+                3. Have average sentiment over that streamer session
+    3. Connect frontend query API's to backend API's 
 
+cd /Users/rahul/twitch-ingester
+source .venv/bin/activate
+PYTHONPATH=".:backend" python backend/main.py
+
+cd /Users/rahul/twitch-ingester
+source .venv/bin/activate
+PYTHONPATH=".:backend" python backend/consumers/sentiment.py
+
+05/03/26
+Learned Django Rest API 
+Created a simple get endpoint to recive sessions
