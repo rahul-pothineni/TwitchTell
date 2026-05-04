@@ -28,7 +28,7 @@ async def authenticate(app_id: str, app_secret: str):
 async def resolve_target_channels(twitch: Twitch, channels: list[str], session: Session):
     """Resolve channel logins to TwitchUser objects, raising if any are missing."""
     targets = [user async for user in twitch.get_users(logins=channels)]
-    found = {u.login.lower() for u in targets}
+    found = {u.display_name.lower() for u in targets}
     for streamer_name in found:
         await Streamer.objects.aget_or_create(session = session, username = streamer_name)
     missing = [c for c in channels if c.lower() not in found]

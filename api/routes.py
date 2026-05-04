@@ -9,5 +9,7 @@ router = DefaultRouter()
 
 urlpatterns = [
     path("", include(router.urls)),
-    path("test/", views.dropdownMenuData),
+    path("test/", views.sessionData),
+    path('test/<str:curSessionId>/', views.streamerData, name="streamerData"),
+    path('test/<str:curSessionId>/<str:curStreamerName>', views.messageData, name="messageData")
 ]

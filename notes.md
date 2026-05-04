@@ -95,3 +95,8 @@ PYTHONPATH=".:backend" python backend/consumers/sentiment.py
 05/03/26
 Learned Django Rest API 
 Created a simple get endpoint to recive sessions
+
+05/04/26 12:20 PM - 1:07 PM
+Finished getting JSON data and REST api framework for the
+post storage dropdown menu 
+    (need to handle error hadeling, 404 etc...)
